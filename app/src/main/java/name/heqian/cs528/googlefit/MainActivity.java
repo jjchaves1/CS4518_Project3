@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ImageView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -27,14 +28,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             if (bundle != null) {
                 String string = bundle.getString(DownloadService.FILEPATH);
                 if (resultCode == RESULT_OK) {
-                    Toast.makeText(MainActivity.this,
-                            "Download complete. Download URI: " + string,
-                            Toast.LENGTH_LONG).show();
-                    textView.setText("Download done");
-                } else {
-                    Toast.makeText(MainActivity.this, "Download failed",
-                            Toast.LENGTH_LONG).show();
-                    textView.setText("Download failed");
+                  ImageView currentActPic = (ImageView) getActivity().findViewById(R.id.activeImage);
+
                 }
             }
         }
