@@ -35,12 +35,12 @@ public class ActivityRecognizedService extends IntentService {
 
     private void handleDetectedActivities(List<DetectedActivity> probableActivities) {
         DetectedActivity highestProbActivity = probableActivities.get(0);
-        ImageView currentActPic = (ImageView) getActivity().findViewById(R.id.activeImage);
+//        ImageView currentActPic = (ImageView) getActivity().findViewById(R.id.activeImage);
 
         for( DetectedActivity activity : probableActivities ) {
 
-            if(activity.getConfidence() > highestProbActivity.getConfidence())
-                highestProbActivity = activity;
+                if(activity.getConfidence() > highestProbActivity.getConfidence())
+                    highestProbActivity = activity;
 
             switch( activity.getType() ) {
                 case DetectedActivity.IN_VEHICLE: {

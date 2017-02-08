@@ -1,6 +1,8 @@
 package name.heqian.cs528.googlefit;
 
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,6 +18,27 @@ import com.google.android.gms.wallet.wobs.TimeInterval;
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     public GoogleApiClient mApiClient;
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
+                String string = bundle.getString(DownloadService.FILEPATH);
+                if (resultCode == RESULT_OK) {
+                    Toast.makeText(MainActivity.this,
+                            "Download complete. Download URI: " + string,
+                            Toast.LENGTH_LONG).show();
+                    textView.setText("Download done");
+                } else {
+                    Toast.makeText(MainActivity.this, "Download failed",
+                            Toast.LENGTH_LONG).show();
+                    textView.setText("Download failed");
+                }
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +68,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    public void setImage() {
 
     }
 }
