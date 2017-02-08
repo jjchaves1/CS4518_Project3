@@ -3,6 +3,7 @@ package name.heqian.cs528.googlefit;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
@@ -13,10 +14,15 @@ import com.google.android.gms.location.DetectedActivity;
 
 import java.util.List;
 
+import database.ActivityBaseHelper;
+
 /**
  * Created by Paul on 2/1/16.
  */
 public class ActivityRecognizedService extends IntentService {
+
+    private Context mContext;
+    private SQLiteDatabase mDatabase;
 
     public ActivityRecognizedService() {
         super("ActivityRecognizedService");
@@ -36,6 +42,9 @@ public class ActivityRecognizedService extends IntentService {
 
     private void handleDetectedActivities(List<DetectedActivity> probableActivities) {
         DetectedActivity highestProbActivity = probableActivities.get(0);
+        mContext = getApplicationContext();
+        mDatabase = new ActivityBaseHelper(mContext)
+                .getWritableDatabase();
 
         for( DetectedActivity activity : probableActivities ) {
             if (activity.getConfidence() > highestProbActivity.getConfidence())
