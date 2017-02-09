@@ -92,18 +92,19 @@ public class ActivityRecognizedService extends IntentService {
         mDatabase = new ActivityBaseHelper(mContext)
                 .getWritableDatabase();
         String activityString;
+        String toastActivity = null;
         ContentValues vals;
 
         for( DetectedActivity activity : probableActivities ) {
             if (activity.getConfidence() > highestProbActivity.getConfidence())
                 highestProbActivity = activity;
         }
-        if(lastAct != null && highestProbActivity != lastAct && lastDate != null){
+        if(lastAct != null && highestProbActivity.getType() != lastAct.getType() && lastDate != null && toastActivity != null){
             long rightNow = new Date().getTime();
             long minsPassed = (lastDate.getTime() - rightNow) / 60000;
             long secsPassed = ((lastDate.getTime() - rightNow) % 60000) / 1000;
             int duration = Toast.LENGTH_SHORT;
-            String a = "You have just walked for ";
+            String a = "You have just " + toastActivity + " for ";
             String b = " min, ";
             String c = " seconds.";
             String toastString = a + minsPassed + b + secsPassed + c;
@@ -118,6 +119,7 @@ public class ActivityRecognizedService extends IntentService {
         switch( highestProbActivity.getType() ) {
             case DetectedActivity.IN_VEHICLE: {
                 activityString = "In Vehicle";
+                toastActivity = "driven";
                 vals = getContentValues(activityString);
                 mDatabase.insert(ActivityTable.NAME, null, vals);
                 Log.e("ActivityRecogition", "In Vehicle: " + highestProbActivity.getConfidence());
@@ -125,6 +127,7 @@ public class ActivityRecognizedService extends IntentService {
             }
             case DetectedActivity.ON_FOOT: {
                 activityString = "On Foot";
+                toastActivity = "walked";
                 vals = getContentValues(activityString);
                 mDatabase.insert(ActivityTable.NAME, null, vals);
                 Log.e( "ActivityRecogition", "On Foot: " + highestProbActivity.getConfidence() );
@@ -132,6 +135,7 @@ public class ActivityRecognizedService extends IntentService {
             }
             case DetectedActivity.RUNNING: {
                 activityString = "Running";
+                toastActivity = "ran";
                 vals = getContentValues(activityString);
                 mDatabase.insert(ActivityTable.NAME, null, vals);
                 Log.e( "ActivityRecogition", "Running: " + highestProbActivity.getConfidence() );
@@ -139,6 +143,7 @@ public class ActivityRecognizedService extends IntentService {
             }
             case DetectedActivity.STILL: {
                 activityString = "Still";
+                toastActivity = "been still";
                 vals = getContentValues(activityString);
                 mDatabase.insert(ActivityTable.NAME, null, vals);
                 Log.e( "ActivityRecogition", "Still: " + highestProbActivity.getConfidence() );
@@ -146,6 +151,7 @@ public class ActivityRecognizedService extends IntentService {
             }
             case DetectedActivity.WALKING: {
                 activityString = "Walking";
+                toastActivity = "walked";
                 vals = getContentValues(activityString);
                 mDatabase.insert(ActivityTable.NAME, null, vals);
                 Log.e( "ActivityRecogition", "Walking: " + highestProbActivity.getConfidence() );
