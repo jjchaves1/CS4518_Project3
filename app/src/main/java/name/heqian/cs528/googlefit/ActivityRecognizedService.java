@@ -10,6 +10,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.ActivityRecognitionResult;
 import com.google.android.gms.location.DetectedActivity;
@@ -85,17 +86,33 @@ public class ActivityRecognizedService extends IntentService {
 
     private void handleDetectedActivities(List<DetectedActivity> probableActivities) {
         DetectedActivity highestProbActivity = probableActivities.get(0);
-        DetectedActivity lastAct;
+        DetectedActivity lastAct = null;
+        Date lastDate = null;
         mContext = getApplicationContext();
         mDatabase = new ActivityBaseHelper(mContext)
                 .getWritableDatabase();
         String activityString;
-        Date activityDate;
         ContentValues vals;
 
         for( DetectedActivity activity : probableActivities ) {
             if (activity.getConfidence() > highestProbActivity.getConfidence())
                 highestProbActivity = activity;
+        }
+        if(lastAct != null && highestProbActivity != lastAct && lastDate != null){
+            long rightNow = new Date().getTime();
+            long minsPassed = (lastDate.getTime() - rightNow) / 60000;
+            long secsPassed = ((lastDate.getTime() - rightNow) % 60000) / 1000;
+            int duration = Toast.LENGTH_SHORT;
+            String a = "You have just walked for ";
+            String b = " min, ";
+            String c = " seconds.";
+            String toastString = a + minsPassed + b + secsPassed + c;
+            Toast activityChangeToast = Toast.makeText(mContext, toastString, duration);
+            activityChangeToast.show();
+        }
+        if(lastAct == null && lastDate == null){
+            lastAct = highestProbActivity;
+            lastDate = new Date();
         }
 
         switch( highestProbActivity.getType() ) {
@@ -134,7 +151,7 @@ public class ActivityRecognizedService extends IntentService {
                 Log.e( "ActivityRecogition", "Walking: " + highestProbActivity.getConfidence() );
                 /*
                 if( activity.getConfidence() >= 75 ) {
-                    NotificationCompat.Builder builder = new NotificationCompat.B8uilder(this);
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
                     builder.setContentText( "Are you walking?" );
                     builder.setSmallIcon( R.mipmap.ic_launcher );
                     builder.setContentTitle( getString( R.string.app_name ) );
@@ -152,5 +169,6 @@ public class ActivityRecognizedService extends IntentService {
             System.out.println(act);
         }
         System.out.println();
+        lastAct = highestProbActivity;
     }
 }
