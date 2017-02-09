@@ -93,8 +93,7 @@ public class ActivityRecognizedService extends IntentService {
         DetectedActivity lastAct = null;
         Date lastDate = null;
         mContext = getApplicationContext();
-        mDatabase = new ActivityBaseHelper(mContext)
-                .getWritableDatabase();
+        mDatabase = new ActivityBaseHelper(mContext).getWritableDatabase();
         String activityString;
         String toastActivity = null;
         ContentValues vals;
@@ -167,7 +166,6 @@ public class ActivityRecognizedService extends IntentService {
                 Intent intent = new Intent(NOTIFICATION);
                 intent.putExtra(IMAGE, R.drawable.still);
                 intent.putExtra(TEXT, R.string.still);
-                System.out.println("Sending Still Broadcast");
                 sendBroadcast(intent);
                 break;
             }
@@ -200,11 +198,11 @@ public class ActivityRecognizedService extends IntentService {
                 break;
             }
         }
-        List<String> acts = getActivities();
-        for(String act: acts){
-            System.out.println(act);
-        }
-        System.out.println();
+//        List<String> acts = getActivities();
+//        for(String act: acts){
+//            System.out.println(act);
+//        }
+//        System.out.println();
         lastAct = highestProbActivity;
     }
 }

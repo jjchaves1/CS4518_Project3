@@ -69,7 +69,6 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
     @Override
     protected void onResume() {
         super.onResume();
-        System.out.println("ON RESUME");
         registerReceiver(receiver, new IntentFilter(ActivityRecognizedService.NOTIFICATION));
     }
 

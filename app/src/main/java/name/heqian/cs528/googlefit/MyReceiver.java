@@ -34,7 +34,6 @@ public class MyReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Bundle bundle = intent.getExtras();
-        System.out.println("RECEIVED SOMETHING");
 
         if (bundle != null) {
             int imageFile = (int) bundle.get(ActivityRecognizedService.IMAGE);
@@ -48,9 +47,10 @@ public class MyReceiver extends BroadcastReceiver {
                 if (MainActivity.mediaPlayer.isPlaying() == false) {
                     MainActivity.mediaPlayer.start();
                 }
+            } else {
+                MainActivity.mediaPlayer.stop();
             }
 
-            System.out.println("BUNDLE NOT NULL");
 
 
         }
