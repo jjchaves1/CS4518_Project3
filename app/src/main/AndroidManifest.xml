@@ -16,6 +16,14 @@
             </intent-filter>
         </activity>
 
+        <receiver android:name=".MyReceiver" >
+            <intent-filter>
+                <action android:name="name.heqian.cs528.googlefit.ActivityRecognizedService">
+
+                </action>
+            </intent-filter>
+        </receiver>
+
         <service android:name=".ActivityRecognizedService" />
     </application>
 

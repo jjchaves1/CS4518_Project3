@@ -23,6 +23,10 @@ public class ActivityRecognizedService extends IntentService {
 
     private Context mContext;
     private SQLiteDatabase mDatabase;
+    public static final String IMAGE = "image";
+    public static final String TEXT = "text";
+    public static final String NOTIFICATION = "name.heqian.cs528.googlefit";
+
 
     public ActivityRecognizedService() {
         super("ActivityRecognizedService");
@@ -54,31 +58,57 @@ public class ActivityRecognizedService extends IntentService {
         switch( highestProbActivity.getType() ) {
             case DetectedActivity.IN_VEHICLE: {
                 Log.e("ActivityRecogition", "In Vehicle: " + highestProbActivity.getConfidence());
+                Intent intent = new Intent(NOTIFICATION);
+                intent.putExtra(IMAGE, R.drawable.in_vehicle);
+                intent.putExtra(TEXT, R.string.driving);
+                sendBroadcast(intent);
                 break;
             }
             case DetectedActivity.ON_FOOT: {
                 Log.e( "ActivityRecogition", "On Foot: " + highestProbActivity.getConfidence() );
+                Intent intent = new Intent(NOTIFICATION);
+                intent.putExtra(IMAGE, R.drawable.walking);
+                intent.putExtra(TEXT, R.string.walking);
+                sendBroadcast(intent);
                 break;
             }
             case DetectedActivity.RUNNING: {
                 Log.e( "ActivityRecogition", "Running: " + highestProbActivity.getConfidence() );
+                Intent intent = new Intent(NOTIFICATION);
+                intent.putExtra(IMAGE, R.drawable.running);
+                intent.putExtra(TEXT, R.string.running);
+
+                sendBroadcast(intent);
                 break;
             }
             case DetectedActivity.STILL: {
                 Log.e( "ActivityRecogition", "Still: " + highestProbActivity.getConfidence() );
+                Intent intent = new Intent(NOTIFICATION);
+                intent.putExtra(IMAGE, R.drawable.still);
+                intent.putExtra(TEXT, R.string.still);
+                System.out.println("Sending Still Broadcast");
+                sendBroadcast(intent);
                 break;
             }
             case DetectedActivity.WALKING: {
                 Log.e( "ActivityRecogition", "Walking: " + highestProbActivity.getConfidence() );
-                /*
-                if( activity.getConfidence() >= 75 ) {
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-                    builder.setContentText( "Are you walking?" );
-                    builder.setSmallIcon( R.mipmap.ic_launcher );
-                    builder.setContentTitle( getString( R.string.app_name ) );
-                    NotificationManagerCompat.from(this).notify(0, builder.build());
-                } */
-                break;
+
+                Intent intent = new Intent(NOTIFICATION);
+                intent.putExtra(IMAGE, R.drawable.walking);
+                intent.putExtra(TEXT, R.string.walking);
+                sendBroadcast(intent);
+
+
+
+
+//                if( highestProbActivity.getConfidence() >= 75 ) {
+//                    NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+//                    builder.setContentText( "Are you walking?" );
+//                    builder.setSmallIcon( R.mipmap.ic_launcher );
+//                    builder.setContentTitle( getString( R.string.app_name ) );
+//                    NotificationManagerCompat.from(this).notify(0, builder.build());
+//                }
+//                break;
             }
             case DetectedActivity.UNKNOWN: {
                 Log.e( "ActivityRecogition", "Unknown: " + highestProbActivity.getConfidence() );
